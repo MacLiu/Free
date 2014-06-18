@@ -13,7 +13,22 @@
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
     // Override point for customization after application launch.
+    [Parse setApplicationId:@"Tyq8u9y4Bqh26Y2loOIiovObBRvq9q5YHBXgam5x"
+                  clientKey:@"JOgBYVjBu7Ci8anTfuINbdECz4I4KaLvFdX8vbBw"];
+    
+    sleep(2);
+    [self setUpUI];
+    
     return YES;
+}
+
+// Helper Method to set up our user interface
+-(void)setUpUI
+{
+    // For Nav Bar
+    [[UINavigationBar appearance] setBarTintColor:[UIColor cyanColor]];
+    [[UINavigationBar appearance] setTitleTextAttributes:[NSDictionary dictionaryWithObjectsAndKeys:[UIColor blueColor], NSForegroundColorAttributeName,[UIFont fontWithName:@"Gill Sans" size:23.0], NSFontAttributeName, nil]];
+    [[UINavigationBar appearance] setTintColor:[UIColor blueColor]];
 }
 							
 - (void)applicationWillResignActive:(UIApplication *)application
@@ -42,5 +57,6 @@
 {
     // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
 }
+
 
 @end
