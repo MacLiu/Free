@@ -45,6 +45,7 @@
                 UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"Sorry!" message:[error.userInfo objectForKey:@"error"]delegate:nil cancelButtonTitle:@"Try again" otherButtonTitles: nil];
                 [alert show];
             } else {
+                // Move to the users inbox
                 [self.activityIndicator startAnimating];
                 [self.navigationController popToRootViewControllerAnimated:YES];
             }

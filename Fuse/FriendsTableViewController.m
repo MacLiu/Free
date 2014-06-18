@@ -113,11 +113,13 @@
 
 #pragma mark - Helper Methods
 
+// Determines whether the friend is busy by checking their status in the server
 -(BOOL)userIsBusy:(PFUser *)user
 {
     return ([[user objectForKey:@"status"] length] > 0);
 }
 
+// Setting the cell if the user is busy
 -(void)havePlans: (UITableViewCell *)cell
 {
     cell.backgroundColor = [UIColor redColor];

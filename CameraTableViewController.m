@@ -148,7 +148,8 @@
     
     UITableViewCell *cell = [self.tableView cellForRowAtIndexPath:indexPath];
     PFUser *user = [self.friends objectAtIndex:indexPath.row];
-
+    
+    // Checks if the selected user is busy
     if ([[user objectForKey:@"status"] length] == 0) {
         if (cell.accessoryView == nil) {
             cell.accessoryView = [MSCellAccessory accessoryWithType:FLAT_CHECKMARK color:[UIColor blueColor]];
@@ -199,16 +200,19 @@
     NSData *fileData;
     
     if (self.image != nil) {
+        // File is an image
         UIImage *newImage = [self resizeImageWithWidth:320.0 Height:480.0];
         fileData = UIImagePNGRepresentation(newImage);
         fileName = @"image.png";
         fileType = @"image";
     } else {
+        //File is a video
         fileData = [NSData dataWithContentsOfFile:self.video];
         fileName= @"video.mov";
         fileType = @"video";
     }
     
+    // Saves the file and message to the server
     PFFile *file = [PFFile fileWithName:fileName data:fileData];
     [file saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
         if (error) {

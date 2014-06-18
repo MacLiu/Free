@@ -30,7 +30,9 @@
     NSString *passwordConfirm = [self.confirmPasswordTextField.text stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     NSString *phoneNumber = [[NSString stringWithFormat:@"%@",self.number.text] stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
     
+    // checks if the passwords match
     if ([password isEqualToString:passwordConfirm]) {
+        // checks if all credentials are filled in
         if ([username length] == 0 || [password length] == 0 || [phoneNumber length] == 0 || [name length] == 0) {
             UIAlertView *alert = [[UIAlertView alloc]initWithTitle:@"Could not sign up!" message:@"Please make sure all fields are valid" delegate:nil cancelButtonTitle:@"Ok" otherButtonTitles: nil];
             [alert show];

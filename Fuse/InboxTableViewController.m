@@ -33,6 +33,7 @@
 -(void)viewWillAppear:(BOOL)animated
 {
     [super viewWillAppear:animated];
+    
     [self getMessages];
 
     [self.navigationController.navigationBar setHidden:NO];
@@ -51,6 +52,7 @@
     
     self.tableView.backgroundColor = [UIColor blackColor];
     
+    // If no user is logged in, move to ViewController to login or create account
     PFUser *currentUser = [PFUser currentUser];
     if (currentUser) {
         NSLog(@" %@ %@",currentUser.username, currentUser.email);
@@ -58,6 +60,7 @@
         [self performSegueWithIdentifier:@"toLogin" sender:self];
     }
     
+    // Refresh messages in inbox
     self.refreshControl = [[UIRefreshControl alloc] init];
     [self.refreshControl addTarget:self action:@selector(getMessages) forControlEvents:UIControlEventValueChanged];
     
@@ -68,6 +71,7 @@
     [super didReceiveMemoryWarning];
     // Dispose of any resources that can be recreated.
 }
+
 -(void)prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender{
     if ([segue.destinationViewController isKindOfClass:[ViewController class]]) {
         [segue.destinationViewController setHidesBottomBarWhenPushed:YES];
@@ -103,7 +107,7 @@
     cell.detailTextLabel.text = [message objectForKey:@"messageStatus"];
     cell.detailTextLabel.textColor = [UIColor blueColor];
     
-    // Gets the messages file type and determine whether it is a image or video file
+    // Gets the messages file type and determine whether it is a image or video file to set the icon image
     if ([[message objectForKey:@"fileType"] isEqualToString:@"image"]) {
         cell.imageView.image = [UIImage imageNamed:@"icon_image"];
     } else {
@@ -127,6 +131,7 @@
     if ([[self.selectedMessage objectForKey:@"fileType"] isEqualToString:@"image"]) {
         [self performSegueWithIdentifier:@"toPicture" sender:self];
     } else {
+        //Create a movie player subview
         PFFile *file = [self.selectedMessage objectForKey:@"file"];
         NSURL *url = [NSURL URLWithString:file.url];
         self.moviePlayer.contentURL = url;
@@ -137,6 +142,7 @@
         [self.moviePlayer setFullscreen:YES animated:YES];
     }
     
+    // Set the message status to opened after being viewed
     [self.selectedMessage setObject:@"Opened" forKey:@"messageStatus"];
     [self.selectedMessage saveInBackground];
     [self.tableView reloadData];
@@ -145,6 +151,7 @@
 -(void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath
 {
     if (editingStyle == UITableViewCellEditingStyleDelete) {
+        //Delete the message that was deleted by the user in the server
         PFObject *message = [self.messages objectAtIndex:indexPath.row];
         [self.messages removeObjectAtIndex:indexPath.row];
         [message deleteInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
@@ -205,7 +212,14 @@
         NSLog(@"%@", [[alertView textFieldAtIndex:0] text]);
         
         self.statusButton.title = @"Plans";
-        currentUser[@"status"] = [[alertView textFieldAtIndex:0] text];
+        
+        // Prevents the user from having a status with length of 0
+        if ([[[alertView textFieldAtIndex:0] text]length] == 0) {
+            currentUser[@"status"] = @" ";
+        } else {
+            currentUser[@"status"] = [[alertView textFieldAtIndex:0] text];
+        }
+        
         [currentUser saveInBackgroundWithBlock:^(BOOL succeeded, NSError *error) {
             if (error) {
                 NSLog(@"%@", error);

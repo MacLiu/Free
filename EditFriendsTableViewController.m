@@ -94,6 +94,7 @@
     
     cell.textLabel.textColor = [UIColor whiteColor];
     
+    // Checks if the user is a friend
     if ([self isFriend:user]){
         cell.accessoryView = [MSCellAccessory accessoryWithType:FLAT_CHECKMARK color:[UIColor blueColor]];
     } else {
